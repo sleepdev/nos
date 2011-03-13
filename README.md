@@ -1,4 +1,4 @@
-my nosql manifesto
+My nosql Manifesto
 ==================
 
 1. schemas change, expect this
@@ -7,8 +7,8 @@ my nosql manifesto
 
 Examples
 --------
-    >>> import nosqlsql as db
-    >>> db.connect(host="localhost",database="mydb",user="me",password="mypassword")
+    >>> from nosqlsql import connect
+    >>> db = connect(host="localhost",database="mydb",user="me",password="mypassword")
     >>> db.signup("user","password")
     >>> u = db.login("user","password")
     >>> u.email = "sleepdev@gmail.com"
