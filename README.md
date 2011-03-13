@@ -10,6 +10,9 @@ Examples
     >>> from nosqlsql import connect
     >>> db = connect(host="localhost",database="mydb",user="me",password="mypassword")
     >>> db.signup("user","password")
+    True
+    >>> db.signup("user","password")
+    False
     >>> u = db.login("user","password")
     >>> u.email = "sleepdev@gmail.com"
     >>> u.email

@@ -13,11 +13,14 @@ class connect( tornado.database.Connection ):
         )    
 
     def signup( self, unique_identifier, password ):
+        if self.get("SELECT * FROM user WHERE unique_identifier=%s",unique_identifier):
+            return False
         self.execute(
             "INSERT user (unique_identifier,pwdhash) VALUES (%s,UNHEX(SHA1(CONCAT(unique_identifier,%s))))",
             unique_identifier,
             password
         )
+        return True
 
     def login( self, unique_identifier, password ):
         user_data = self.get(
