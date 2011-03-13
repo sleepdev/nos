@@ -5,3 +5,13 @@ my nosql manifesto
 2. some people do not understand SQL, expect this
 3. json is beautiful, exploit this
 
+    >>> import nosqlsql as db
+    >>> db.connect(host="localhost",database="mydb",user="me",password="mypassword")
+    >>> db.signup("user","password")
+    >>> u = db.login("user","password")
+    >>> u.email = "sleepdev@gmail.com"
+    >>> u.email
+    '"sleepdev@gmail.com"'
+    >>> del u.email
+    >>> u.email
+    >>> 
