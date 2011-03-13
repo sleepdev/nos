@@ -6,7 +6,7 @@ my nosql manifesto
 3. json is beautiful, exploit this
 
 Examples
-========
+--------
     >>> import nosqlsql as db
     >>> db.connect(host="localhost",database="mydb",user="me",password="mypassword")
     >>> db.signup("user","password")
