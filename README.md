@@ -5,6 +5,7 @@ my nosql manifesto
 2. some people do not understand SQL, expect this
 3. json is beautiful, exploit this
 
+Examples
     &gt;&gt;&gt; import nosqlsql as db
     &gt;&gt;&gt; db.connect(host="localhost",database="mydb",user="me",password="mypassword")
     &gt;&gt;&gt; db.signup("user","password")
