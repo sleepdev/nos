@@ -44,7 +44,7 @@ class User:
             key
         )
         if row: 
-            return row["_value"]
+            return json.loads(row["_value"])
         else:
             return None
     def __setattr__( self, key, value ):

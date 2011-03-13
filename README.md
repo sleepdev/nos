@@ -6,13 +6,13 @@ my nosql manifesto
 3. json is beautiful, exploit this
 
 Examples
-    &gt;&gt;&gt; import nosqlsql as db
-    &gt;&gt;&gt; db.connect(host="localhost",database="mydb",user="me",password="mypassword")
-    &gt;&gt;&gt; db.signup("user","password")
-    &gt;&gt;&gt; u = db.login("user","password")
-    &gt;&gt;&gt; u.email = "sleepdev@gmail.com"
-    &gt;&gt;&gt; u.email
-    '"sleepdev@gmail.com"'
-    &gt;&gt;&gt; del u.email
-    &gt;&gt;&gt; u.email
-    &gt;&gt;&gt; 
+    >>> import nosqlsql as db
+    >>> db.connect(host="localhost",database="mydb",user="me",password="mypassword")
+    >>> db.signup("user","password")
+    >>> u = db.login("user","password")
+    >>> u.email = "sleepdev@gmail.com"
+    >>> u.email
+    u'sleepdev@gmail.com'
+    >>> del u.email
+    >>> u.email
+    >>> 
