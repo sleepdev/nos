@@ -1,67 +1,65 @@
 import json
 import tornado.database
 
-class connect( tornado.database.Connection ):
-    def __init__( self, host, database, user=None, password=None, max_idle_time=7*3600 ):
-        tornado.database.Connection.__init__(
-            self, 
-            host=host, 
-            database=database, 
-            user=user, 
-            password=password, 
-            max_idle_time=max_idle_time 
-        )    
+dbconf = json.loads(file("/etc/nosqlsql/dbconf.json"))
+db = tornado.database.Connection( **dbconf )
+models = None
 
-    def signup( self, unique_identifier, password ):
-        if self.get("SELECT * FROM user WHERE unique_identifier=%s",unique_identifier):
-            return False
-        self.execute(
-            "INSERT user (unique_identifier,pwdhash) VALUES (%s,UNHEX(SHA1(CONCAT(unique_identifier,%s))))",
-            unique_identifier,
-            password
-        )
-        return True
+def signup( unique_identifier, password ):
+    if db.get("SELECT * FROM user WHERE unique_identifier=%s",unique_identifier):
+        return False
+    db.execute(
+        "INSERT term_user (unique_identifier,pwdhash) VALUES (%s,UNHEX(SHA1(CONCAT(unique_identifier,%s))))",
+        unique_identifier,
+        password
+    )
+    return True
 
-    def login( self, unique_identifier, password ):
-        user_data = self.get(
-            "SELECT id FROM user WHERE unique_identifier=%s AND pwdhash=UNHEX(SHA1(CONCAT(unique_identifier,%s)))", 
-            unique_identifier,
-            password
-        )
-        if user_data:
-            return User( self, user_data["id"] )
-        else:
-            return None
+def login( unique_identifier, password ):
+    user_data = db.get(
+        "SELECT id FROM term_user WHERE unique_identifier=%s AND pwdhash=UNHEX(SHA1(CONCAT(unique_identifier,%s)))", 
+        unique_identifier,
+        password
+    )
+    if user_data:
+        return term_user( user_data["id"] )
+    else:
+        return None
 
-class User:
-    def __init__( self, db, user_id ):
-        vars(self)["db"] = db
-        vars(self)["id"] = user_id
+def safehash( v ):
+    if isinstance(v,term_list) or isinstance(v,term_dict)\
+    or isinstance(v,term_object): return v.id
+    else: return hash(v)
+
+def getmodel( classname ):
+    if classname not in models:
+        models[classname] = type(classname,(),{})
+    return models[classname]
+
+def push_value( value ): pass #internalize and return value_id
+def pull_value( row ): 
+    if row.type=="NoneType": return None
+    elif row.type=="bool":   return row.term_bool
+    elif row.type=="int":    return row.term_int
+    elif row.type=="float":  return row.term_float
+    elif row.type=="str":    return row.term_str 
+    else: 
+        klass = getmodel( row.type )
+        obj = object.__new__(klass)
+        vars(obj)["id"] = row["id"]
+        return obj
+
+class term_list(list): pass #TODO
+class term_dict(dict): pass #TODO
+class term_object(object):
     def __getattr__( self, key ):
-        row = vars(self)["db"].get(
-            "SELECT _value FROM user_data WHERE user_id=%s AND _key=%s",
-            vars(self)["id"],
-            key
-        )
-        if row: 
-            return json.loads(row["_value"])
-        else:
-            return None
+        if key=="id":
+            return vars(self)["id"]
+        row = db.get("SELECT term.* FROM term_object,term WHERE term_object.id=%s AND field=%s AND value_id=term.id",self.id,key)
+        return pull_value( row )
     def __setattr__( self, key, value ):
-        value = json.dumps(value)
-        vars(self)["db"].execute(
-            "INSERT user_data(user_id,_key,_value) values(%s,%s,%s) ON DUPLICATE KEY UPDATE _value=%s",
-            vars(self)["id"],
-            key,
-            value, value
-        )
+        value_id = push_value( value )
+        db.execute("INSERT term_object(id,field,value_id) values(%s,%s,%s) ON DUPLICATE KEY UPDATE value_id=%s",self.id,key,value_id,value_id)
     def __delattr__( self, key ):
-        vars(self)["db"].execute(
-            "DELETE FROM user_data WHERE user_id=%s AND _key=%s",
-            vars(self)["id"],
-            key
-        )
-
-
-
+        db.execute("DELETE FROM term_object WHERE id=%s AND field=%s",self.id,key)
 
