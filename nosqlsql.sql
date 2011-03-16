@@ -7,11 +7,6 @@ SET SESSION storage_engine = "InnoDB";
 SET SESSION time_zone = "+0:00";
 ALTER DATABASE CHARACTER SET "utf8" COLLATE "utf8_bin";
 
-CREATE TABLE user (
-    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    unique_identifier VARBINARY(255) NOT NULL UNIQUE,
-    pwdhash BINARY(20)
-);
 
 CREATE TABLE object (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -20,9 +15,34 @@ CREATE TABLE object (
     KEY (type)
 );
 
-CREATE TABLE term_int ();
-CREATE TABLE term_str ();
-CREATE TABLE term_float ();
-CREATE TABLE term_list ();
-CREATE TABLE term_dict ();
+CREATE TABLE term_int (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    value BIGINT NOT NULL
+);
+CREATE TABLE term_str (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    value VARBINARY(65535) NOT NULL
+);
+CREATE TABLE term_float (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    value DOUBLE NOT NULL
+);
+CREATE TABLE term_list (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    index INT NOT NULL,
+    value_id INT NOT NULL,
+    KEY(id,index)
+);
+CREATE TABLE term_dict (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    key_hash INT NOT NULL,
+    bucket INT NOT NULL,
+    value_id INT NOT NULL,
+    KEY(id,key_hash,bucket)
+);
+CREATE TABLE term_user (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    unique_identifier VARBINARY(255) NOT NULL UNIQUE,
+    pwdhash BINARY(20)
+);
 
