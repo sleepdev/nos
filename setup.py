@@ -1,7 +1,7 @@
 from distutils.core import setup
 
 setup(
-    name="nosqlsql",
-    py_modules=['nosqlsql'],
-    data_files=[('/etc/nosqlsql',['dbconf.json'])],
+    name="nos",
+    py_modules=['nos'],
+    data_files=[('/etc/nos',['dbconf.json'])],
 )

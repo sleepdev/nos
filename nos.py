@@ -1,5 +1,5 @@
 """
-Nosqlsql is the simplest orm for python. It just works.
+Nos is the simplest orm for python. It just works.
 
 To run doctests:
     nosetests --with-doctest
@@ -72,7 +72,7 @@ TODO: Index, List, Map, Object spec & implementations
 import json
 import tornado.database
 
-dbconf = json.loads(file("/etc/nosqlsql/dbconf.json").read())
+dbconf = json.loads(file("/etc/nos/dbconf.json").read())
 db = tornado.database.Connection( **dbconf )
 
 

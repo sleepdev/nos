@@ -1,6 +1,6 @@
-CREATE DATABASE nosqlsql;
-CREATE USER "nosqlsql" IDENTIFIED BY "nosqlsql";
-GRANT ALL ON nosqlsql.* TO "nosqlsql"@"localhost" IDENTIFIED BY "nosqlsql";
+CREATE DATABASE nos;
+CREATE USER "nos" IDENTIFIED BY "nos";
+GRANT ALL ON nos.* TO "nos"@"localhost" IDENTIFIED BY "nos";
 
 USE nosqlsql;
 SET SESSION storage_engine = "InnoDB";
