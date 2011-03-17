@@ -1,9 +1,42 @@
+"""
+Nosqlsql is the simplest orm for python. It just works.
+
+
+User authentication is the core of this orm.
+You cannot do anything without a user object.
+
+>>> delete_user( "a@b.cd" )
+>>> signup( "a@b.cd", "abcd" )
+<User: a@b.cd>
+>>> signin( "a@b.cd", "abcd" )
+<User: a@b.cd>
+>>> signin( "a@b.cd", "wxyz" )
+>>>
+
+
+Once you create a user object, just use as you normally would.
+
+>>> u = signin( "a@b.cd", "abcd" )
+>>> u.email = "a@b.cd"
+>>> u.email
+u"a@b.cd"
+>>> del u.email
+>>> u.email
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+AttributeError: User instance has no attribute 'email'
+>>>
+
+"""
+
+
 import json
 import tornado.database
 
 dbconf = json.loads(file("/etc/nosqlsql/dbconf.json"))
 db = tornado.database.Connection( **dbconf )
 models = None
+
 
 def signup( unique_identifier, password ):
     if db.get("SELECT * FROM user WHERE unique_identifier=%s",unique_identifier):
