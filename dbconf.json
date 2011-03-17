@@ -1,6 +1,7 @@
 {
-  "host": "127.0.0.1",
+  "host": "localhost",
   "database": "nosqlsql",
   "user": "nosqlsql",
-  "password": nosqlsql"
+  "password": "nosqlsql"
 }
+

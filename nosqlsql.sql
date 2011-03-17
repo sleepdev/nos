@@ -27,7 +27,7 @@ CREATE TABLE field (
 );
 
 -- primitive types are not unique within the database
-CREATE TABLE term_Bool (
+CREATE TABLE term_Boolean (
     id INT NOT NULL PRIMARY KEY,
     value TINYINT(1) NOT NULL
 );
