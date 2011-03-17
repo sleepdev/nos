@@ -2,7 +2,7 @@ CREATE DATABASE nos;
 CREATE USER "nos" IDENTIFIED BY "nos";
 GRANT ALL ON nos.* TO "nos"@"localhost" IDENTIFIED BY "nos";
 
-USE nosqlsql;
+USE nos;
 SET SESSION storage_engine = "InnoDB";
 SET SESSION time_zone = "+0:00";
 ALTER DATABASE CHARACTER SET "utf8" COLLATE "utf8_bin";

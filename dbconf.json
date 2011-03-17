@@ -1,7 +1,7 @@
 {
   "host": "localhost",
-  "database": "nosqlsql",
-  "user": "nosqlsql",
-  "password": "nosqlsql"
+  "database": "nos",
+  "user": "nos",
+  "password": "nos"
 }
 
