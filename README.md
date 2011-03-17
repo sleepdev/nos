@@ -1,4 +1,5 @@
 nosqlsql
 ========
 
-A simple expression language implemented in mysql. Thus, all objects in this language are trivially persistent.
+A simple expression language implemented in mysql. 
+All objects in this language are trivially persistent.
