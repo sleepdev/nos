@@ -1,4 +1,4 @@
-nosqlsql
+nos
 ========
 
 A simple expression language implemented in mysql. 
