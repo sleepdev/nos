@@ -1,22 +1,4 @@
-My nosql Manifesto
-==================
+nosqlsql
+========
 
-1. schemas change, expect this
-2. some people do not understand SQL, expect this
-3. json is beautiful, exploit this
-
-Examples
---------
-    >>> from nosqlsql import connect
-    >>> db = connect(host="localhost",database="mydb",user="me",password="mypassword")
-    >>> db.signup("user","password")
-    True
-    >>> db.signup("user","password")
-    False
-    >>> u = db.login("user","password")
-    >>> u.email = "sleepdev@gmail.com"
-    >>> u.email
-    u'sleepdev@gmail.com'
-    >>> del u.email
-    >>> u.email
-    >>> 
+A simple expression language implemented in mysql. Thus, all objects in this language are trivially persistent.
