@@ -1,25 +1,34 @@
 """
 Nosqlsql is the simplest orm for python. It just works.
 
-
-User authentication is the core of this orm.
-You cannot do anything without a user object.
-
->>> delete_user( "a@b.cd" )
->>> signup( "a@b.cd", "abcd" )
-<User: a@b.cd>
->>> signin( "a@b.cd", "abcd" )
-<User: a@b.cd>
->>> signin( "a@b.cd", "wxyz" )
->>>
+To run doctests:
+    nosetests --with-doctest
 
 
-Once you create a user object, just use as you normally would.
 
->>> u = signin( "a@b.cd", "abcd" )
->>> u.email = "a@b.cd"
+All operations start from an index.
+An index here, unlike those from relational databases, uniquely identifies only one object.
+This is the only way to persist objects across sessions.
+
+>>> u = Object( type='User' )
+>>> u
+<User: @x1533325>
+>>> index['a@b.cd'] = u
+>>> index['a@b.cd']
+<User: @x1533325>
+>>> 'a@b.cd' in index
+True
+>>> del index['a@b.cd']
+>>> 'a@b.cd' in index
+False
+
+
+
+Persistent objects behave like normal python objects
+
+>>> u.email = 'a@b.cd'
 >>> u.email
-u"a@b.cd"
+'a@b.cd'
 >>> del u.email
 >>> u.email
 Traceback (most recent call last):
