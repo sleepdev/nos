@@ -36,7 +36,7 @@ True
 Collection types are just as easy to work with
 >>> v = db_push( [] )
 >>> v
-<Row: List>
+<nos.Row: List>
 >>> v = db_pull( v )
 >>> v
 <nos.List: instance>
@@ -45,7 +45,7 @@ Collection types are just as easy to work with
 1
 >>> v = db_push( {} )
 >>> v
-<Row: Map>
+<nos.Row: Map>
 >>> v = db_pull( v )
 >>> v
 <nos.Map: instance>
@@ -54,7 +54,7 @@ Collection types are just as easy to work with
 5
 
 
-Objects are even easier
+Objects are even easier, just extend nos.Object
 >>> class MyModel( nos.Object ):
 ...     def __init__( self, arg ):
 ...         self.my_field = arg
@@ -108,8 +108,14 @@ def db_push( value ):
         id = db.execute("insert heap(type) values('String')")
         db.execute("insert term_String(id,value) values(%s,%s)",id,value)
         return Row( type="String", id=id )
-    else:
+    elif isinstance(value,List):
         raise NotImplementedError()
+    elif isinstance(value,Map):
+        raise NotImplementedError()
+    elif isinstance(value,Object):
+        raise NotImplementedError()
+    else:
+        raise TypeError("Models must extend nos.object")
 
 
 def db_pull( row ):
@@ -123,7 +129,11 @@ def db_pull( row ):
         return db.get("select * from term_Float where id=%s",row.id).value
     elif row.type=="String":
         return db.get("select * from term_String where id=%s",row.id).value
-    else:
+    elif row.type=="List":
+        raise NotImplementedError()
+    elif row.type=="Map":
+        raise NotImplementedError()
+    elif row.type=="Object":
         raise NotImplementedError()
 
 
