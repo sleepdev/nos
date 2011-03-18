@@ -5,66 +5,71 @@ To run doctests:
     nosetests --with-doctest
 
 
+
 Primitive types go in and come out as normal python values
 >>> v = db_push( None )
 >>> v
-<Row: Void>
+<nos.Row: Void>
 >>> db_pull( v )
 >>> v = db_push( True )
 >>> v
-<Row: Boolean>
+<nos.Row: Boolean>
 >>> db_pull( v )
 True
 >>> v = db_push( 2 )
 >>> v
-<Row: Integer>
+<nos.Row: Integer>
 >>> db_pull( v )
 2L
 >>> v = db_push( 1.2 )
 >>> v
-<Row: Float>
+<nos.Row: Float>
 >>> db_pull( v )
 1.2
 >>> v = db_push( 'abc' )
 >>> v
-<Row: String>
+<nos.Row: String>
 >>> db_pull( v )
 'abc'
 
-TODO: Index, List, Map, Object spec & implementations
+
+Collection types are just as easy to work with
+>>> v = db_push( [] )
+>>> v
+<Row: List>
+>>> v = db_pull( v )
+>>> v
+<nos.List: instance>
+>>> v.append( 1 )
+>>> v[0]
+1
+>>> v = db_push( {} )
+>>> v
+<Row: Map>
+>>> v = db_pull( v )
+>>> v
+<nos.Map: instance>
+>>> v['a'] = 5
+>>> v['a']
+5
 
 
+Objects are even easier
+>>> class MyModel( nos.Object ):
+...     def __init__( self, arg ):
+...         self.my_field = arg
+...
+>>> v = MyModel( 1 )
+>>> v.my_field
+1
 
 
-#All operations start from an index.
-#An index here, unlike those from relational databases, uniquely identifies only one object.
-#This is the only way to persist objects across sessions.
+Indexes allow you to find saved objects
+Index keys must be strings
+>>> index["a"] = []
+>>> index["a"]
+<nos.List: instance>
 
-#>>> u = Object( type='User' )
-#>>> u
-#<User: @x1533325>
-#>>> index['a@b.cd'] = u
-#>>> index['a@b.cd']
-#<User: @x1533325>
-#>>> 'a@b.cd' in index
-#True
-#>>> del index['a@b.cd']
-#>>> 'a@b.cd' in index
-#False
-
-
-
-#Persistent objects behave like normal python objects
-
-#>>> u.email = 'a@b.cd'
-#>>> u.email
-#'a@b.cd'
-#>>> del u.email
-#>>> u.email
-#Traceback (most recent call last):
-#  File "<stdin>", line 1, in <module>
-#AttributeError: User instance has no attribute 'email'
-#>>>
 
 """
 
@@ -81,7 +86,7 @@ class Row:
         self.type = type
         self.id = id
     def __repr__( self ):
-        return "<Row: %s>" % self.type
+        return "<nos.Row: %s>" % self.type
 
 def db_push( value ): 
     if value==None:
