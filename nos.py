@@ -108,12 +108,27 @@ def db_push( value ):
         id = db.execute("insert heap(type) values('String')")
         db.execute("insert term_String(id,value) values(%s,%s)",id,value)
         return Row( type="String", id=id )
-    elif isinstance(value,List):
-        raise NotImplementedError()
-    elif isinstance(value,Map):
-        raise NotImplementedError()
-    elif isinstance(value,Object):
-        raise NotImplementedError()
+    elif isinstance(value,list): 
+        id = db.execute("insert heap(type) values('List')")
+        for i,v in enumerate(value):
+            value_id = db_push( v ).id
+            db.execute("insert term_List(id,i,value_id) values(%s,%s,%s)",id,i,value_id)
+        return Row( type="List", id=id )
+    elif isinstance(value,dict):
+        id = db.execute("insert heap(type) values('Map')")
+        for k,v in value.items():
+            hashk = hash(k)
+            value_id = db_push( v ).id
+            while True:
+                randi = random.randint(-2147483648,2147483647)
+                try:
+                    db.execute("insert term_Map(id,key_hash,bucket,value_id)",id,hashk,randi,value_id) 
+                    return Row( type="Map", id=id )
+                except: pass
+    elif isinstance(value,List)\
+      or isinstance(value,Map)\
+      or isinstance(value,Object):
+        return Row( type=value.__class__.__name__, id=value.id )
     else:
         raise TypeError("Models must extend nos.object")
 
@@ -130,10 +145,15 @@ def db_pull( row ):
     elif row.type=="String":
         return db.get("select * from term_String where id=%s",row.id).value
     elif row.type=="List":
-        raise NotImplementedError()
+        return List( row.id )
     elif row.type=="Map":
-        raise NotImplementedError()
+        return Map( row.id )
     elif row.type=="Object":
-        raise NotImplementedError()
+        #do not call __init__ because this is not a new object, it is just returned from the dead
+        model = db.get("select * from term_Object where id=%s",row.id).model
+        klass = models[model]
+        obj   = object.__new__( klass ) 
+        vars(obj)['id'] = row.id
+        return obj
 
 
