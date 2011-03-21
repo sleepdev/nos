@@ -23,11 +23,16 @@ Objects are easy too.
 ...     def __init__( self, arg ):
 ...         Object.__init__( self )
 ...         self.my_field = arg
+...     def my_function( self ):
+...         return self.my_field * 2
 ...
 >>> models["MyModel"] = MyModel
->>> v = MyModel( 1 )
+>>> index['a'] = MyModel( 1 )
+>>> v = index['a']
 >>> v.my_field
 1
+>>> v.my_function()
+2
 
 
 Indexes allow you to find saved objects.
