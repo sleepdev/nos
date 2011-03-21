@@ -38,6 +38,8 @@ Objects are easy too.
 Indexes allow you to find saved objects.
 Index keys must be strings.
 >>> index["a"] = 5
+>>> "a" in index
+True
 >>> index["a"]
 5
 >>> index["user: a@b.cd"] = MyModel(2)
@@ -110,4 +112,6 @@ class index:
     def __setitem__( self, key, value ):
         value_id = db_push(value)
         id = db.execute("insert indx(indx,id) values(%s,%s) on duplicate key update id=%s", key, value_id, value_id )
+    def __contains__( self, key ):
+        return True if db.get("select id from indx where indx=%s",key) else False
 index = index()
