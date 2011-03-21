@@ -96,8 +96,11 @@ class Object(object):
         db.execute("insert obj_class(id,klass) values(%s,%s)",id,self.__class__.__name__)
         vars(self)["id"] = id
     def __getattr__( self, name ):
-        id = db.get("select value_id from obj_field where id=%s and field=%s",vars(self)["id"],name).value_id
-        return db_pull( id )
+        row = db.get("select value_id from obj_field where id=%s and field=%s",vars(self)["id"],name)
+        if row:
+            return db_pull( row.value_id )
+        else:
+            raise AttributeError("'%s' object has no attribute '%s'" % (self.__class__.__name__,name))
     def __setattr__( self, name, val ):
         id = db_push( val )
         db.execute("insert obj_field(id,field,value_id) values(%s,%s,%s) on duplicate key update value_id=%s",
