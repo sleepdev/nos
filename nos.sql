@@ -1,70 +1,34 @@
-CREATE DATABASE nos;
-CREATE USER "nos" IDENTIFIED BY "nos";
-GRANT ALL ON nos.* TO "nos"@"localhost" IDENTIFIED BY "nos";
-
-USE nos;
 SET SESSION storage_engine = "InnoDB";
 SET SESSION time_zone = "+0:00";
-ALTER DATABASE CHARACTER SET "utf8" COLLATE "utf8_bin";
+ALTER DATABASE CHARACTER SET "latin1" COLLATE "latin1_bin";
 
 
 -- all objects are allocated on the heap, for simplicity
 CREATE TABLE heap (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    type ENUM('Void', 'Boolean', 'Integer','Float','String','List','Map','Object') NOT NULL
+    type ENUM('json','object') NOT NULL
 );
 -- an index uniquely identifies an object on the heap
 CREATE TABLE indx (
-    indx VARBINARY(255) NOT NULL PRIMARY KEY,
+    indx VARBINARY(767) NOT NULL PRIMARY KEY,
     id INT NOT NULL    
 );
--- object fields are relations between two objects on the heap
-CREATE TABLE field (
+
+CREATE TABLE json (
+    id INT NOT NULL PRIMARY KEY,
+    js TEXT NOT NULL
+);
+
+CREATE TABLE obj_class (
+    id INT NOT NULL PRIMARY KEY,
+    klass VARBINARY(767) NOT NULL
+);
+CREATE TABLE obj_field (
     id INT NOT NULL,
-    field VARBINARY(255) NOT NULL,
+    field VARBINARY(767) NOT NULL,
     value_id INT NOT NULL,
-    PRIMARY KEY(id,field)
+    PRIMARY KEY (id,field)
 );
-
--- primitive types are not unique within the database
-CREATE TABLE term_Boolean (
-    id INT NOT NULL PRIMARY KEY,
-    value TINYINT(1) NOT NULL
-);
-CREATE TABLE term_Integer (
-    id INT NOT NULL PRIMARY KEY,
-    value BIGINT NOT NULL
-);
-CREATE TABLE term_Float (
-    id INT NOT NULL PRIMARY KEY,
-    value DOUBLE NOT NULL
-);
-CREATE TABLE term_String (
-    id INT NOT NULL PRIMARY KEY,
-    value TEXT NOT NULL
-);
-
--- complex types are integrated into the database
-CREATE TABLE term_List (
-    id INT NOT NULL,
-    i INT NOT NULL,
-    value_id INT NOT NULL,
-    PRIMARY KEY(id,i)
-);
-CREATE TABLE term_Map (
-    id INT NOT NULL,
-    key_hash INT NOT NULL,
-    bucket INT NOT NULL,
-    value_id INT NOT NULL,
-    PRIMARY KEY(id,key_hash,bucket)
-);
-
--- objects will look for a model to wrap themselves in
-CREATE TABLE term_Object (
-    id INT NOT NULL PRIMARY KEY,
-    model VARBINARY(255) NOT NULL
-);
-
 
 
 
