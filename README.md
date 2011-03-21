@@ -6,7 +6,7 @@ Nos is the simplest orm for python. It just works.
 
     Primitive types go in and come out as normal python values.
 
-    import nos
+    >>> import nos
     >>> nos.db_pull( nos.db_push( None ) )
     >>> nos.db_pull( nos.db_push( True ) )
     True
