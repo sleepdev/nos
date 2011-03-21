@@ -6,7 +6,7 @@ To run doctests:
 
 
 
-Primitive types go in and come out as normal python values
+Primitive types go in and come out as normal python values.
 >>> db_pull( db_push( None ) )
 >>> db_pull( db_push( True ) )
 True
@@ -18,7 +18,7 @@ True
 u'abc'
 
 
-Objects are easy too
+Objects are easy too.
 >>> class MyModel( Object ):
 ...     def __init__( self, arg ):
 ...         Object.__init__( self )
@@ -30,8 +30,8 @@ Objects are easy too
 1
 
 
-Indexes allow you to find saved objects
-Index keys must be strings
+Indexes allow you to find saved objects.
+Index keys must be strings.
 >>> index["a"] = 5
 >>> index["a"]
 5
