@@ -1,8 +1,6 @@
 nos
 ========
 
-Nos is the simplest orm for python. It just works.
-
 Primitive types go in and come out as normal python values.
     >>> db_pull( db_push( None ) )
     >>> db_pull( db_push( True ) )
